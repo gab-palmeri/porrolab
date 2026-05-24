@@ -1,0 +1,75 @@
+title: Porrolab
+description: Home Network Central Dashboard
+cardBlur: 3xl
+
+useEqualHeights: true
+
+hideErrors: falses
+
+disableCollapse: true
+
+hideVersion: false
+
+showStats: false
+
+headerStyle: clean
+statusStyle: dot
+
+background:
+  image: /images/background.jpg
+  opacity: 50
+
+layout:
+  Main:
+    tab: Home
+    header: false
+    style: row
+    columns: 2
+    Media Server:
+      style: row
+      columns: 3
+    Storage:
+      style: row
+      columns: 2
+
+  Secondary:
+    tab: Home
+    header: false
+    style: row
+    columns: 3
+
+    Arr Stack:
+      style: row
+      columns: 1
+      Arr Stack small:
+        header: false
+        style: row
+        columns: 2
+
+    Misc:
+      style: row
+      columns: 1
+      Misc small:
+        header: false
+        style: row
+        columns: 2
+
+    Others:
+      style: row
+      columns: 2
+
+  Docker - Porroflix:
+    tab: Docker
+    style: column
+
+  Docker - Porropics:
+    tab: Docker
+    style: column
+
+  Docker - Porrodrive:
+    tab: Docker
+    style: column
+
+  Docker - Misc:
+    tab: Docker
+    style: column

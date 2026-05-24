@@ -1,0 +1,280 @@
+- Main:
+    - Media Server:
+        - Porroflix:
+            icon: jellyfin.png
+            href: "{{HOMEPAGE_VAR_JELLYFIN_URL}}"
+            server: local
+            container: jellyfin
+            widget:
+                type: jellyfin
+                url: http://host.docker.internal:8096
+                key: "{{HOMEPAGE_VAR_JELLYFIN_API_KEY}}"
+                version: 2
+                enableBlocks: true
+                enableNowPlaying: false
+                enableUser: true
+                enableMediaControl: false
+                expandOneStreamToTwoRows: false
+                fields: ["movies", "series"]
+
+        - Radarr:
+            icon: radarr.png
+            href: "{{HOMEPAGE_VAR_RADARR_URL}}"
+            server: local
+            container: radarr
+            widget:
+                type: radarr
+                url: http://host.docker.internal:7878
+                key: "{{HOMEPAGE_VAR_RADARR_API_KEY}}"
+                fields: ["wanted"]
+
+        - Sonarr:
+            icon: sonarr.png
+            href: "{{HOMEPAGE_VAR_SONARR_URL}}"
+            server: local
+            container: sonarr
+            widget:
+                type: sonarr
+                url: http://host.docker.internal:8989
+                key: "{{HOMEPAGE_VAR_SONARR_API_KEY}}"
+                fields: ["wanted"]
+
+    - Storage:
+        - Porropics:
+            icon: immich.png
+            href: "{{HOMEPAGE_VAR_IMMICH_URL}}"
+            server: local
+            container: immich_server
+            widget:
+                type: immich
+                url: http://host.docker.internal:2283
+                key: "{{HOMEPAGE_VAR_IMMICH_API_KEY}}"
+                version: 2
+                fields: ["photos", "videos", "storage"]
+
+        - Porrodrive:
+            icon: seafile.png
+            href: "{{HOMEPAGE_VAR_SEAFILE_URL}}"
+            container: seafile
+            widget:
+                type: customapi
+                url: http://host.docker.internal:8085/api/v2.1/admin/sysinfo/
+                refreshInterval: 10000
+                method: GET
+                headers:
+                    Authorization: "Bearer {{HOMEPAGE_VAR_SEAFILE_API_KEY}}"
+                mappings:
+                    - field: repos_count
+                      label: Repositories
+                      format: number
+                    - field: total_files_count
+                      label: Total Files
+                      format: number
+                    - field: total_storage
+                      label: Storage
+                      format: bytes
+                    - field: total_devices_count
+                      label: Total Devices
+                      format: number
+
+- Secondary:
+    - Arr Stack:
+        - qBittorrent:
+            icon: qbittorrent.png
+            href: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
+            server: local
+            container: torrent-client
+            widget:
+                type: qbittorrent
+                url: http://host.docker.internal:8080
+                username: "{{HOMEPAGE_VAR_QBITTORRENT_USERNAME}}"
+                password: "{{HOMEPAGE_VAR_QBITTORRENT_PASSWORD}}"
+                fields: ["download", "seed"]
+
+        - Jellyseerr:
+            icon: jellyseerr.png
+            href: "{{HOMEPAGE_VAR_JELLYSEERR_URL}}"
+            server: local
+            container: jellyseerr
+
+        - Arr Stack small:
+            - Bazarr:
+                icon: bazarr.png
+                href: "{{HOMEPAGE_VAR_BAZARR_URL}}"
+                server: local
+                container: bazarr
+
+            - Prowlarr:
+                icon: prowlarr.png
+                href: "{{HOMEPAGE_VAR_PROWLARR_URL}}"
+                server: local
+                container: prowlarr
+
+    - Misc:
+        - Tailscale:
+            icon: tailscale.png
+            href: https://login.tailscale.com/admin/machines
+            widget:
+                type: tailscale
+                deviceid: "{{HOMEPAGE_VAR_TAILSCALE_DEVICE_ID}}"
+                key: "{{HOMEPAGE_VAR_TAILSCALE_API_KEY}}"
+
+        - TagBot:
+            icon: telegram.png
+            server: local
+            container: tagbot-app
+        - TagBot DB:
+            icon: postgres.png
+            server: local
+            container: tagbot-db
+
+    - Others:
+        - Proton Mail:
+            icon: proton-mail.png
+            href: https://mail.proton.me
+
+        - Proton Drive:
+            icon: proton-drive.png
+            href: https://drive.proton.me
+
+        - Gmail:
+            icon: gmail.png
+            href: https://mail.google.com
+
+        - Google Drive:
+            icon: google-drive.png
+            href: https://drive.google.com
+
+        - Monkeytype:
+            icon: monkeytype.png
+            href: https://monkeytype.com
+
+        - Reddit:
+            icon: reddit.png
+            href: https://reddit.com
+
+        - ChatGPT:
+            icon: chatgpt.png
+            href: https://chatgpt.com
+
+        - Gemini:
+            icon: google-gemini.png
+            href: https://gemini.google.com
+
+- Docker - Porroflix:
+    - Jellyfin:
+        icon: jellyfin.png
+        server: local
+        container: jellyfin
+        showStats: true
+
+    - Jellyseerr:
+        icon: jellyseerr.png
+        server: local
+        container: jellyseerr
+        showStats: true
+
+    - qBittorrent:
+        icon: qbittorrent.png
+        server: local
+        container: torrent-client
+        showStats: true
+
+    - Radarr:
+        icon: radarr.png
+        server: local
+        container: radarr
+        showStats: true
+
+    - Sonarr:
+        icon: sonarr.png
+        server: local
+        container: sonarr
+        showStats: true
+
+    - Bazarr:
+        icon: bazarr.png
+        server: local
+        container: bazarr
+        showStats: true
+
+    - Prowlarr:
+        icon: prowlarr.png
+        server: local
+        container: prowlarr
+        showStats: true
+
+- Docker - Porropics:
+    - Immich:
+        icon: immich.png
+        server: local
+        container: immich_server
+        showStats: true
+
+    - Immich ML:
+        icon: immich.png
+        server: local
+        container: immich_machine_learning
+        showStats: true
+
+    - Immich Redis:
+        icon: redis.png
+        server: local
+        container: immich_redis
+        showStats: true
+
+    - Immich DB:
+        icon: postgres.png
+        server: local
+        container: immich_postgres
+        showStats: true
+
+- Docker - Porrodrive:
+    - Seafile:
+        icon: seafile.png
+        server: local
+        container: seafile
+        showStats: true
+
+    - SeaDoc:
+        icon: seafile.png
+        server: local
+        container: seadoc
+        showStats: true
+
+    - Seafile Caddy:
+        icon: caddy.png
+        server: local
+        container: seafile-caddy
+        showStats: true
+
+    - Seafile MySQL:
+        icon: mariadb.png
+        server: local
+        container: seafile-mysql
+        showStats: true
+
+    - Seafile Redis:
+        icon: redis.png
+        server: local
+        container: seafile-redis
+        showStats: true
+
+- Docker - Misc:
+    - Homepage:
+        icon: homepage.png
+        server: local
+        container: homepage
+        showStats: true
+
+    - TagBot:
+        icon: telegram.png
+        server: local
+        container: tagbot-app
+        showStats: true
+
+    - TagBot DB:
+        icon: postgres.png
+        server: local
+        container: tagbot-db
+        showStats: true

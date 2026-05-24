@@ -1,0 +1,16 @@
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Docker data folders
+docker_data/
+**/docker_data/
+
+# Optional local files
+.DS_Store
+*.log
+
+# Immich hwaccel files
+hwaccel.ml.yml
+hwaccel.transcoding.yml

@@ -1,0 +1,31 @@
+- search:
+    provider: duckduckgo # google, duckduckgo, bing, baidu, brave or custom
+    focus: true # Optional, will set focus to the search bar on page load
+    showSearchSuggestions: true # Optional, will show search suggestions. Defaults to false
+    target: _blank # One of _self, _blank, _parent or _top
+
+- openmeteo:
+    label: "{{HOMEPAGE_VAR_LOCATION}}"
+    latitude: 38.1157
+    longitude: 13.3615
+    timezone: Europe/Rome
+    units: metric
+    cache: 5
+
+- datetime:
+    text_size: md
+    format:
+      timeStyle: short
+
+- resources:
+    cpu: true
+    memory: true
+    cputemp: true
+    tempmin: 0
+    tempmax: 100
+    units: metric
+    disk:
+        - /
+        - /mnt/storage
+    diskUnits: bytes
+    refresh: 3000

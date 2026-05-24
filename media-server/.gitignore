@@ -1,0 +1,7 @@
+docker_data/
+venv/
+.env
+
+
+.DS_Store
+Thumbs.db
