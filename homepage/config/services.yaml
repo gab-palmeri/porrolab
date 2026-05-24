@@ -74,7 +74,7 @@
                       label: Storage
                       format: bytes
                     - field: total_devices_count
-                      label: Total Devices
+                      label: Devices
                       format: number
 
 - Secondary:
