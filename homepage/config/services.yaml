@@ -68,7 +68,7 @@
                       label: Repositories
                       format: number
                     - field: total_files_count
-                      label: Total Files
+                      label: Files
                       format: number
                     - field: total_storage
                       label: Storage
