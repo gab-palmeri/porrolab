@@ -11,6 +11,8 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
+    devices:
+      - /dev/dri:/dev/dri
     volumes:
       - ${CONFIG_DIR}/jellyfin/config:/config
       - jellyfin-cache:/cache
