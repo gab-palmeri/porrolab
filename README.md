@@ -42,7 +42,7 @@ Configured services:
 
 | Service | Local Port | Description |
 |---|---:|---|
-| `svc:porroflix` | `8096` | porroflix media server |
+| `svc:porroflix` | `8096` | Media server |
 | `svc:jellyseerr` | `5055` | Movie and TV show request interface |
 | `svc:bazarr` | `6767` | Subtitle management |
 | `svc:radarr` | `7878` | Movie management |
