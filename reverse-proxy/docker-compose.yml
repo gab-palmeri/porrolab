@@ -1,0 +1,20 @@
+services:
+  caddy:
+    image: caddy:2.8-alpine
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./docker_data/data:/data
+      - ./docker_data/config:/config
+    env_file:
+      - .env
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    name: proxy

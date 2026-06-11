@@ -30,6 +30,9 @@ services:
     restart: always
     healthcheck:
       disable: false
+    networks:
+      - default
+      - proxy
 
   immich-machine-learning:
     container_name: immich_machine_learning
@@ -72,3 +75,8 @@ services:
 
 volumes:
   model-cache:
+
+networks:
+  default:
+  proxy:
+    external: true

@@ -1,0 +1,27 @@
+http://home.{env.DOMAIN}, http://home.{env.TS_DOMAIN} {
+    reverse_proxy homepage:3000
+}
+http://flix.{env.DOMAIN}, http://flix.{env.TS_DOMAIN} {
+    reverse_proxy jellyfin:8096
+}
+http://jellyseerr.{env.DOMAIN}, http://jellyseerr.{env.TS_DOMAIN} {
+    reverse_proxy jellyseerr:5055
+}
+http://bazarr.{env.DOMAIN}, http://bazarr.{env.TS_DOMAIN} {
+    reverse_proxy bazarr:6767
+}
+http://radarr.{env.DOMAIN}, http://radarr.{env.TS_DOMAIN} {
+    reverse_proxy radarr:7878
+}
+http://sonarr.{env.DOMAIN}, http://sonarr.{env.TS_DOMAIN} {
+    reverse_proxy sonarr:8989
+}
+http://prowlarr.{env.DOMAIN}, http://prowlarr.{env.TS_DOMAIN} {
+    reverse_proxy prowlarr:9696
+}
+http://qbittorrent.{env.DOMAIN}, http://qbittorrent.{env.TS_DOMAIN} {
+    reverse_proxy torrent-client:8080
+}
+http://pics.{env.DOMAIN}, http://pics.{env.TS_DOMAIN} {
+    reverse_proxy immich_server:2283
+}

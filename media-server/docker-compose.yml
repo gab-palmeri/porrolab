@@ -2,7 +2,6 @@ volumes:
   jellyfin-cache:
 
 services:
-
   jellyfin:
     image: jellyfin/jellyfin
     container_name: jellyfin
@@ -19,7 +18,8 @@ services:
       - ${DATA_DIR}/${MEDIA_FOLDER}:/data/media
     ports:
       - "8096:8096"
-
+    networks:
+      - proxy
 
   jellyseerr:
     image: fallenbagel/jellyseerr:latest
@@ -34,7 +34,8 @@ services:
       - "5055:5055"
     depends_on:
       - jellyfin
-
+    networks:
+      - proxy
 
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
@@ -49,7 +50,8 @@ services:
       - ${DATA_DIR}/${MEDIA_FOLDER}:/media
     ports:
       - "6767:6767"
-
+    networks:
+      - proxy
 
   radarr:
     image: linuxserver/radarr
@@ -64,6 +66,8 @@ services:
       - ${DATA_DIR}:/data
     ports:
       - "7878:7878"
+    networks:
+      - proxy
 
   sonarr:
     image: ghcr.io/hotio/sonarr:latest
@@ -78,6 +82,8 @@ services:
       - ${DATA_DIR}:/data
     ports:
       - "8989:8989"
+    networks:
+      - proxy
 
   prowlarr:
     image: linuxserver/prowlarr
@@ -91,6 +97,8 @@ services:
       - ${CONFIG_DIR}/prowlarr/config:/config
     ports:
       - "9696:9696"
+    networks:
+      - proxy
 
   qbittorrent:
     image: linuxserver/qbittorrent
@@ -105,4 +113,10 @@ services:
       - ${CONFIG_DIR}/qbittorrent/config:/config
       - ${DATA_DIR}/${TORRENTS_FOLDER}:/data/torrents
     ports:
-      - "8080:8080" 
+      - "8080:8080"
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true

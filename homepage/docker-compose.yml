@@ -6,7 +6,7 @@ services:
     env_file:
       - .env
     ports:
-      - 3000:3000
+      - "3000:3000"
     extra_hosts:
       - host.docker.internal:host-gateway
     volumes:
@@ -15,5 +15,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${EXTERNAL_STORAGE}:/mnt/storage:ro
     restart: unless-stopped
+    networks:
+      - proxy
 
-networks: {}
+networks:
+  proxy:
+    external: true

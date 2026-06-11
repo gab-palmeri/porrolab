@@ -3,15 +3,16 @@ set -euo pipefail
 
 read -r -d '' SERVICES_JSON <<'EOF' || true
 {
-  "svc:porroflix": 8096,
-  "svc:jellyseerr": 5055,
-  "svc:bazarr": 6767,
-  "svc:radarr": 7878,
-  "svc:sonarr": 8989,
-  "svc:prowlarr": 9696,
-  "svc:qbittorrent": 8080,
-  "svc:porropics": 2283,
-  "svc:porrodrive": 80
+  "svc:home": 80,
+  "svc:flix": 80,
+  "svc:jellyseerr": 80,
+  "svc:bazarr": 80,
+  "svc:radarr": 80,
+  "svc:sonarr": 80,
+  "svc:prowlarr": 80,
+  "svc:qbittorrent": 80,
+  "svc:pics": 80,
+  "svc:drive": 80
 }
 EOF
 

@@ -6,7 +6,7 @@ It contains multiple services for media, photos, files and a dashboard.
 Each service lives in its own folder and has its own README with setup notes and instructions.
 
 This setup is designed to be used with **Tailscale**.  
-Some services, especially **Porrodrive** based on Seafile, are configured with private Tailscale access in mind, and may not work without it.
+Some services, especially **Drive** based on Seafile, are configured with private Tailscale access in mind, and may not work without it.
 
 ## Services
 
@@ -42,20 +42,20 @@ Configured services:
 
 | Service | Local Port | Description |
 |---|---:|---|
-| `svc:porroflix` | `8096` | Media server |
+| `svc:flix` | `8096` | Media server |
 | `svc:jellyseerr` | `5055` | Movie and TV show request interface |
 | `svc:bazarr` | `6767` | Subtitle management |
 | `svc:radarr` | `7878` | Movie management |
 | `svc:sonarr` | `8989` | TV series management |
 | `svc:prowlarr` | `9696` | Indexer manager |
 | `svc:qbittorrent` | `8080` | Torrent client |
-| `svc:porropics` | `2283` | Immich photo server |
-| `svc:porrodrive` | `80` | Seafile file server (through Caddy) |
+| `svc:pics` | `2283` | Immich photo server |
+| `svc:drive` | `80` | Seafile file server (through Caddy) |
 
 You can also target specific services:
 
 ```bash
-./start-services.sh restart svc:porroflix svc:radarr
+./start-services.sh restart svc:flix svc:radarr
 ```
 
 The script requires `tailscale` and `jq` to be installed on the host.
