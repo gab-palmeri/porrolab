@@ -5,8 +5,8 @@ PorroLab is a self-hosted homelab setup based on Docker.
 It contains multiple services for media, photos, files and a dashboard.  
 Each service lives in its own folder and has its own README with setup notes and instructions.
 
-This setup is designed to be used with **Tailscale**.  
-Some services, especially **Drive** based on Seafile, are configured with private Tailscale access in mind, and may not work without it.
+This setup is designed to be used with **Tailscale**, and it also allows you to use a custom domain.
+Some services, especially **Porrodrive** based on Seafile, are mainly configured with private Tailscale access in mind, and may not work without it.
 
 ## Services
 
@@ -21,12 +21,13 @@ More services may be added over time.
 
 ## Tailscale Services Script
 
-The repository is used with Tailscale Services to assign custom domains, and sometimes they are mandatory (see [Porrodrive](https://github.com/gab-palmeri/porrolab/tree/main/drive)).
+This setup is used with Tailscale Services to assign custom domains, and sometimes they are mandatory (see [Porrodrive](https://github.com/gab-palmeri/porrolab/tree/main/drive)).
 So, a script named `start-services.sh` is included in the repository.
 
 First, you will have to create them in the [Tailscale's dashboard](https://login.tailscale.com), under **Services**.
 
 Then, this script will publish the current machine on Tailscale as the provider for the created services.
+All requests are routed through port `80` to Caddy, which handles the routing for both Tailscale domains and custom domains.
 
 It supports the following actions:
 
@@ -40,17 +41,18 @@ By default, the script applies the selected action to all configured services.
 
 Configured services:
 
-| Service | Local Port | Description |
-|---|---:|---|
-| `svc:flix` | `8096` | Media server |
-| `svc:jellyseerr` | `5055` | Movie and TV show request interface |
-| `svc:bazarr` | `6767` | Subtitle management |
-| `svc:radarr` | `7878` | Movie management |
-| `svc:sonarr` | `8989` | TV series management |
-| `svc:prowlarr` | `9696` | Indexer manager |
-| `svc:qbittorrent` | `8080` | Torrent client |
-| `svc:pics` | `2283` | Immich photo server |
-| `svc:drive` | `80` | Seafile file server (through Caddy) |
+| Service | Description |
+| --- | --- |
+| `svc:home` | Homepage / Dashboard |
+| `svc:flix` | Media server |
+| `svc:jellyseerr` | Movie and TV show request interface |
+| `svc:bazarr` | Subtitle management |
+| `svc:radarr` | Movie management |
+| `svc:sonarr` | TV series management |
+| `svc:prowlarr` | Indexer manager |
+| `svc:qbittorrent` | Torrent client |
+| `svc:pics` | Immich photo server |
+| `svc:drive` | Seafile file server |
 
 You can also target specific services:
 

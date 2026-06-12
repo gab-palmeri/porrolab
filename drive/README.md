@@ -4,10 +4,11 @@ Porrodrive is the file sync and storage section of **PorroLab**.
 
 It is based on **Seafile**, **Caddy**, **SeaDoc** and **Tailscale**.
 
-This setup is designed for private access through a Tailscale domain:
+This setup is designed for private access through both a Tailscale and a custom domain through [Caddy](https://github.com/gab-palmeri/porrolab/tree/main/reverse-proxy):
 
 ```text
-https://<your-service-name>.<your-ts-id>.ts.net
+https://drive.<your-ts-id>.ts.net
+http://drive.<your-domain>.com
 ```
 
 ## Containers
@@ -17,8 +18,7 @@ https://<your-service-name>.<your-ts-id>.ts.net
 | `seafile` | `seafileltd/seafile-mc:13.0-latest` | `https://<your-service-name>.<your-ts-id>.ts.net` | Main Seafile server |
 | `seafile-mysql` | `mariadb:10.11` | Internal only | Database used by Seafile |
 | `seafile-redis` | `redis` | Internal only | Cache backend |
-| `seadoc` | `seafileltd/sdoc-server:2.0-latest` | Internal only | Online document editing |
-| `seafile-caddy` | `lucaslorentz/caddy-docker-proxy:2.12-alpine` | Internal proxy | Reverse proxy for Seafile and SeaDoc |
+| `seafile-collabora` | `collabora/code:26.04.1.4.1` | Internal only | Online document editing |
 
 ## Environment
 
@@ -35,68 +35,59 @@ Main values to configure:
 | Variable | Description |
 |---|---|
 | `SEAFILE_VOLUME` | Path to the Seafile persistent data folder |
-| `SEADOC_VOLUME` | Path to the SeaDoc persistent data folder |
 | `SEAFILE_MYSQL_VOLUME` | Path to the MariaDB persistent data folder |
-| `SEAFILE_CADDY_VOLUME` | Path to the Caddy persistent data folder |
 | `TIME_ZONE` | Time zone used by the stack |
 | `INIT_SEAFILE_MYSQL_ROOT_PASSWORD` | MariaDB root password |
 | `SEAFILE_MYSQL_DB_PASSWORD` | MariaDB password used by Seafile |
 | `SEAFILE_SERVER_HOSTNAME` | Tailscale hostname used to access Porrodrive |
 | `JWT_PRIVATE_KEY` | Private key used by Seafile services |
+| `COLLABORA_PORT` | Collabora port (internal) |
+| `COLLABORA_USERNAME` | Collabora admin panel username |
+| `COLLABORA_PASSWORD` | Collabora admin panel password |
+| `COLLABORA_ENABLE_ADMIN_CONSOLE` | Enable Collabora admin console |
+| `COLLABORA_ENABLE_FILE_LOGGING` | Enable Collabora file logging |
 
 ## Tailscale Service
 
-Create a service in Tailscale under **Services** before starting the containers.
+As the other services, this one is based on a Tailscale service, so you have to create a new one.
+The name must be the same as the one in `SEAFILE_SERVER_HOSTNAME` env variable.
 
-The service must match the hostname configured in `.env`:
+Then, you can use the `start-services.sh` script to start the service and publish it on Tailscale.
 
-```env
-SEAFILE_SERVER_HOSTNAME=<your-service-name>.<your-ts-id>.ts.net
-```
+## After Starting
 
-Then expose it from the repository root using `start.services.sh`:
-
-```bash
-./start-services.sh start svc:service-name
-```
-
-This command publishes the current machine as the provider for the `svc:service-name` and binds it to the local Seafile/Caddy port.
-
-For Porrodrive (my config), the configured service is:
-
-| Service | Local Port | Description |
-|---|---:|---|
-| `svc:porrodrive` | `80` | Seafile file server |
-
-## Post-install
-
-This setup requires running the `post-install.sh` script after configuring the `.env` file.
-
-The script:
-
-- creates the required persistent folders;
-- fixes permissions for `NON_ROOT=true`;
-- starts the Docker stack;
-- waits for Seafile to generate `seahub_settings.py`;
-- patches Seafile URLs and CSRF for Tailscale, HTTPS and SeaDoc;
-- recreates Seafile, SeaDoc and Caddy;
-- prepares Seafile to work behind Tailscale HTTPS.
-
-Run it with:
-
-```bash
-chmod +x post-install.sh
-./post-install.sh
-```
-
-To expose Porrodrive through Tailscale, run from the repository root:
-
-```bash
-./start-services.sh start svc:porrodrive
-```
-
-After completion, Porrodrive should be available at:
+After the first run, Seafile generates a file called `seahub_settings.py` at:
 
 ```text
-https://<your-service-name>.<your-ts-id>.ts.net
+<SEAFILE_VOLUME>/seafile/conf/seahub_settings.py
+```
+
+The following settings must be added manually to that file:
+
+```python
+CSRF_TRUSTED_ORIGINS = [
+    'https://drive.<your-ts-id>.ts.net',
+    'http://drive.<your-ts-id>.ts.net'
+    'https://drive.<your-domain>.com',
+    'http://drive.<your-domain>.com'
+]
+
+OFFICE_SERVER_TYPE = 'CollaboraOffice'
+ENABLE_OFFICE_WEB_APP = True
+ENABLE_OFFICE_WEB_APP_EDIT = True
+
+# Browser → Collabora via Caddy
+OFFICE_WEB_APP_BASE_URL = 'http://seafile-collabora:9980/hosting/discovery'
+
+WOPI_ACCESS_TOKEN_EXPIRATION = 30 * 60
+OFFICE_WEB_APP_FILE_EXTENSION = ('odp', 'ods', 'odt', 'xls', 'xlsb', 'xlsm', 'xlsx', 'ppsx', 'ppt', 'pptm', 'pptx', 'doc', 'docm', 'docx', 'rtf')
+OFFICE_WEB_APP_EDIT_FILE_EXTENSION = ('odp', 'ods', 'odt', 'xls', 'xlsb', 'xlsm', 'xlsx', 'ppsx', 'ppt', 'pptm', 'pptx', 'doc', 'docm', 'docx', 'rtf')
+```
+
+Replace `<your-ts-id>` and `<your-domain>` with the actual values.
+
+After editing, recreate Seafile:
+
+```bash
+docker compose up -d --force-recreate seafile
 ```

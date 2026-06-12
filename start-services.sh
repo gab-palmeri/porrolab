@@ -2,18 +2,18 @@
 set -euo pipefail
 
 read -r -d '' SERVICES_JSON <<'EOF' || true
-{
-  "svc:home": 80,
-  "svc:flix": 80,
-  "svc:jellyseerr": 80,
-  "svc:bazarr": 80,
-  "svc:radarr": 80,
-  "svc:sonarr": 80,
-  "svc:prowlarr": 80,
-  "svc:qbittorrent": 80,
-  "svc:pics": 80,
-  "svc:drive": 80
-}
+[
+  "svc:home",
+  "svc:flix",
+  "svc:jellyseerr",
+  "svc:bazarr",
+  "svc:radarr",
+  "svc:sonarr",
+  "svc:prowlarr",
+  "svc:qbittorrent",
+  "svc:pics",
+  "svc:drive"
+]
 EOF
 
 ACTION="${1:-}"
@@ -32,21 +32,20 @@ if [[ "$ACTION" != "start" && "$ACTION" != "stop" && "$ACTION" != "restart" ]]; 
 fi
 
 for selected in "${SELECTED_SERVICES[@]}"; do
-    if ! echo "$SERVICES_JSON" | jq -e --arg svc "$selected" 'has($svc)' >/dev/null; then
+    if ! echo "$SERVICES_JSON" | jq -e --arg svc "$selected" 'any(. == $svc)' >/dev/null; then
         echo "Unknown service: $selected"
         echo
         echo "Available services:"
-        echo "$SERVICES_JSON" | jq -r 'keys[]'
+        echo "$SERVICES_JSON" | jq -r '.[]'
         exit 1
     fi
 done
 
 start_service() {
     local svc="$1"
-    local port="$2"
 
-    echo "Starting $svc on local port $port..."
-    sudo tailscale serve --service="$svc" --https=443 "http://127.0.0.1:$port"
+    echo "Starting $svc..."
+    sudo tailscale serve --service="$svc" --https=443 "http://127.0.0.1:80"
 }
 
 stop_service() {
@@ -56,9 +55,7 @@ stop_service() {
     sudo tailscale serve --service="$svc" --https=443 off
 }
 
-for svc in $(echo "$SERVICES_JSON" | jq -r 'keys[]'); do
-    PORT=$(echo "$SERVICES_JSON" | jq -r --arg svc "$svc" '.[$svc]')
-
+for svc in $(echo "$SERVICES_JSON" | jq -r '.[]'); do
     if [[ ${#SELECTED_SERVICES[@]} -gt 0 ]]; then
         if [[ ! " ${SELECTED_SERVICES[*]} " =~ " ${svc} " ]]; then
             continue
@@ -67,7 +64,7 @@ for svc in $(echo "$SERVICES_JSON" | jq -r 'keys[]'); do
 
     case "$ACTION" in
         start)
-            start_service "$svc" "$PORT"
+            start_service "$svc"
             ;;
         stop)
             stop_service "$svc"
@@ -76,7 +73,7 @@ for svc in $(echo "$SERVICES_JSON" | jq -r 'keys[]'); do
             echo "Restarting $svc..."
             stop_service "$svc"
             sleep 1
-            start_service "$svc" "$PORT"
+            start_service "$svc"
             ;;
     esac
 done

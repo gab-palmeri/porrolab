@@ -25,3 +25,16 @@ http://qbittorrent.{env.DOMAIN}, http://qbittorrent.{env.TS_DOMAIN} {
 http://pics.{env.DOMAIN}, http://pics.{env.TS_DOMAIN} {
     reverse_proxy immich_server:2283
 }
+http://drive.{env.DOMAIN}, http://drive.{env.TS_DOMAIN} {
+    @collabora {
+        path /browser/* /cool/* /hosting/*
+    }
+    reverse_proxy @collabora seafile-collabora:9980 {
+        header_down -Content-Security-Policy
+        header_up X-Forwarded-Proto https
+    }
+ 
+    reverse_proxy seafile:80 {
+        header_up X-Forwarded-Proto https
+    }
+}
