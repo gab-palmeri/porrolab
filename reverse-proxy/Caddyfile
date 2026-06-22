@@ -33,6 +33,12 @@ http://drive.{env.DOMAIN}, http://drive.{env.TS_DOMAIN} {
         header_down -Content-Security-Policy
         header_up X-Forwarded-Proto https
     }
+
+    redir /seafdav /seafdav/ 308
+
+    handle /seafdav* {
+        reverse_proxy seafile:8086
+    }
  
     reverse_proxy seafile:80 {
         header_up X-Forwarded-Proto https

@@ -86,6 +86,37 @@ OFFICE_WEB_APP_EDIT_FILE_EXTENSION = ('odp', 'ods', 'odt', 'xls', 'xlsb', 'xlsm'
 
 Replace `<your-ts-id>` and `<your-domain>` with the actual values.
 
+If you wish to use Seafile's WebDAV service, you must edit the `seafdav.conf` file at:
+
+```text
+<SEAFILE_VOLUME>/seafile/conf/seafdav.conf
+```
+
+Adding the following lines:
+
+```text
+[WEBDAV]
+
+# Default is false. Change it to true to enable SeafDAV server.
+enabled = true
+
+port = 8086
+debug = true
+
+# If you deploy seafdav behind nginx/apache, you need to modify "share_name".
+share_name = /seafdav
+
+# SeafDAV uses Gunicorn as web server.
+# This option maps to Gunicorn's 'workers' setting. https://docs.gunicorn.org/en/stable/settings.html?#workers
+# By default it's set to 5 processes.
+workers = 5
+
+# This option maps to Gunicorn's 'timeout' setting. https://docs.gunicorn.org/en/stable/settings.html?#timeout
+# By default it's set to 1200 seconds, to support large file uploads.
+timeout = 1200
+```
+
+
 After editing, recreate Seafile:
 
 ```bash
