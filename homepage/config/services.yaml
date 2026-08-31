@@ -236,16 +236,10 @@
         container: seafile
         showStats: true
 
-    - SeaDoc:
-        icon: seafile.png
+    - Collabora:
+        icon: https://cdn.simpleicons.org/collaboraonline/5C2983
         server: local
-        container: seadoc
-        showStats: true
-
-    - Seafile Caddy:
-        icon: caddy.png
-        server: local
-        container: seafile-caddy
+        container: seafile-collabora
         showStats: true
 
     - Seafile MySQL:
