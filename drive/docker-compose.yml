@@ -116,6 +116,8 @@ services:
     networks:
       - seafile-net
       - proxy
+    extra_hosts:
+      - "${SEAFILE_SERVER_HOSTNAME}:host-gateway"
 
 networks:
   seafile-net:
