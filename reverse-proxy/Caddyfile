@@ -1,46 +1,59 @@
-http://home.{env.DOMAIN}, http://home.{env.TS_DOMAIN} {
-    reverse_proxy homepage:3000
+{
+	acme_dns cloudflare {$CF_API_TOKEN}
 }
-http://flix.{env.DOMAIN}, http://flix.{env.TS_DOMAIN} {
-    reverse_proxy jellyfin:8096
-}
-http://jellyseerr.{env.DOMAIN}, http://jellyseerr.{env.TS_DOMAIN} {
-    reverse_proxy jellyseerr:5055
-}
-http://bazarr.{env.DOMAIN}, http://bazarr.{env.TS_DOMAIN} {
-    reverse_proxy bazarr:6767
-}
-http://radarr.{env.DOMAIN}, http://radarr.{env.TS_DOMAIN} {
-    reverse_proxy radarr:7878
-}
-http://sonarr.{env.DOMAIN}, http://sonarr.{env.TS_DOMAIN} {
-    reverse_proxy sonarr:8989
-}
-http://prowlarr.{env.DOMAIN}, http://prowlarr.{env.TS_DOMAIN} {
-    reverse_proxy prowlarr:9696
-}
-http://qbittorrent.{env.DOMAIN}, http://qbittorrent.{env.TS_DOMAIN} {
-    reverse_proxy torrent-client:8080
-}
-http://pics.{env.DOMAIN}, http://pics.{env.TS_DOMAIN} {
-    reverse_proxy immich_server:2283
-}
-http://drive.{env.DOMAIN}, http://drive.{env.TS_DOMAIN} {
-    @collabora {
-        path /browser/* /cool/* /hosting/*
-    }
-    reverse_proxy @collabora seafile-collabora:9980 {
-        header_down -Content-Security-Policy
-        header_up X-Forwarded-Proto https
-    }
 
-    redir /seafdav /seafdav/ 308
+home.{$DOMAIN}, http://home.{$TS_DOMAIN} {
+	reverse_proxy homepage:3000
+}
 
-    handle /seafdav* {
-        reverse_proxy seafile:8086
-    }
- 
-    reverse_proxy seafile:80 {
-        header_up X-Forwarded-Proto https
-    }
+flix.{$DOMAIN}, http://flix.{$TS_DOMAIN} {
+	reverse_proxy jellyfin:8096
+}
+
+jellyseerr.{$DOMAIN}, http://jellyseerr.{$TS_DOMAIN} {
+	reverse_proxy jellyseerr:5055
+}
+
+bazarr.{$DOMAIN}, http://bazarr.{$TS_DOMAIN} {
+	reverse_proxy bazarr:6767
+}
+
+radarr.{$DOMAIN}, http://radarr.{$TS_DOMAIN} {
+	reverse_proxy radarr:7878
+}
+
+sonarr.{$DOMAIN}, http://sonarr.{$TS_DOMAIN} {
+	reverse_proxy sonarr:8989
+}
+
+prowlarr.{$DOMAIN}, http://prowlarr.{$TS_DOMAIN} {
+	reverse_proxy prowlarr:9696
+}
+
+qbittorrent.{$DOMAIN}, http://qbittorrent.{$TS_DOMAIN} {
+	reverse_proxy torrent-client:8080
+}
+
+pics.{$DOMAIN}, http://pics.{$TS_DOMAIN} {
+	reverse_proxy immich_server:2283
+}
+
+drive.{$DOMAIN}, http://drive.{$TS_DOMAIN} {
+	@collabora {
+		path /browser/* /cool/* /hosting/*
+	}
+	reverse_proxy @collabora seafile-collabora:9980 {
+		header_down -Content-Security-Policy
+		header_up X-Forwarded-Proto https
+	}
+
+	redir /seafdav /seafdav/ 308
+
+	handle /seafdav* {
+		reverse_proxy seafile:8086
+	}
+
+	reverse_proxy seafile:80 {
+		header_up X-Forwarded-Proto https
+	}
 }
